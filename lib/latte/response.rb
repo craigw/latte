@@ -28,6 +28,15 @@ module Latte
       uint16 :qclass
     end
 
+    class Answer < BigEndianRecord
+      stringz :qname
+      uint16 :qtype
+      uint16 :qclass
+      uint32 :ttl
+      uint16 :rdlength, :value => lambda { rdata.length }
+      string :rdata
+    end
+
     def header
       ResponseHeader.new.tap { |h|
         h.id = query.id
@@ -39,7 +48,7 @@ module Latte
         h.ra = 0 # Recursion isn't welcome here
         h.rcode = 0 # There are no errors here
         h.qdcount = 1 # You gave me one query
-        h.ancount = 0 # I'm giving you no answer (bwa ha ha)
+        h.ancount = answers.size # The number of answer records I'm sending
         h.nscount = 0 # There are 0 NS records in the authority spart
         h.arcount = 0 # There are 0 additional records in the additional part
       }
@@ -53,8 +62,22 @@ module Latte
       }
     end
 
+    def answers
+      @answers ||= [ example_answer ]
+    end
+
+    def example_answer
+      Answer.new.tap { |a|
+        a.qname = query.qname
+        a.qtype = query.qtype
+        a.qclass = query.qclass
+        a.ttl = 0 # No cache thanks
+        a.rdata = %w(127 0 0 1).map { |o| BinData::Uint8.new(o.to_i).to_binary_s }.join('')
+      }
+    end
+
     def to_s
-      [ header, question ].map { |part|
+      [ header, question, *answers ].map { |part|
         part.to_binary_s
       }.join ''
     end
