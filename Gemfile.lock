@@ -1,0 +1,19 @@
+GIT
+  remote: git://github.com/craigw/pethau.git
+  revision: 6350fbb832b2713b14603daa3b156b046ef6e8e1
+  specs:
+    pethau (0.0.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    bindata (1.4.3)
+    null_logger (0.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bindata
+  null_logger
+  pethau!
