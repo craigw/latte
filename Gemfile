@@ -1,5 +1,5 @@
 source :rubygems
 
-gem 'pethau', :git => 'git://github.com/alphagov/pethau.git'
+gem 'pethau', '0.0.2'
 gem 'null_logger'
 gem 'bindata'

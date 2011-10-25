@@ -1,14 +1,9 @@
-GIT
-  remote: git://github.com/alphagov/pethau.git
-  revision: d164c8b0523f209b654b78685e25bb3cbf7b2dab
-  specs:
-    pethau (0.0.2)
-
 GEM
   remote: http://rubygems.org/
   specs:
     bindata (1.4.3)
     null_logger (0.0.1)
+    pethau (0.0.2)
 
 PLATFORMS
   ruby
@@ -16,4 +11,4 @@ PLATFORMS
 DEPENDENCIES
   bindata
   null_logger
-  pethau!
+  pethau (= 0.0.2)
