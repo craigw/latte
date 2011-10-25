@@ -1,8 +1,8 @@
 GIT
-  remote: git://github.com/craigw/pethau.git
-  revision: 6350fbb832b2713b14603daa3b156b046ef6e8e1
+  remote: git://github.com/alphagov/pethau.git
+  revision: d164c8b0523f209b654b78685e25bb3cbf7b2dab
   specs:
-    pethau (0.0.1)
+    pethau (0.0.2)
 
 GEM
   remote: http://rubygems.org/

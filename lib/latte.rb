@@ -10,8 +10,10 @@ class Object
   include Pethau::PrivateAttrAccessor
 end
 
+require 'latte/hex_presenter'
 require 'latte/command_line'
 require 'latte/address'
 require 'latte/query'
+require 'latte/response'
 require 'latte/server'
 require 'latte/version'

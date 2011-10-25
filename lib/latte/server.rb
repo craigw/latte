@@ -56,7 +56,10 @@ module Latte
           Thread.new do
             query = Query.new data
             client_name = client.remote_address.ip_unpack.join ':'
-            logger.debug "#{client_name} > #{address}: Query #{query}"
+            logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
+            response = Response.new query
+            logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
+            client.reply response.to_s
           end
         end
         logger.warn "Server loop terminated"
