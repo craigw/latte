@@ -2,7 +2,8 @@ module Latte
   class Server
     CHECK_ALIVE_INTERVAL = 0.05
 
-    initialize_with :logger
+    initialize_with :resolver, :logger
+    default_value_of :resolver, lambda { |*| }
     default_value_of :logger    do NullLogger.instance end
     private_attr_accessor :children
     default_value_of :children, {}
@@ -59,8 +60,7 @@ module Latte
               client_name = client.remote_address.ip_unpack.join ':'
               logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
               response = Response.new query
-              response.add "www.example.com. IN CNAME  3600 example.com."
-              response.add "example.com.     IN A     86400 127.0.0.1"
+              resolver.call response
               logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
               client.reply response.to_s
             rescue => e

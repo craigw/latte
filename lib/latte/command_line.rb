@@ -28,9 +28,13 @@ module Latte
     end
 
     def execute
-require 'logger'
       arguments = parse_arguments
-      server = Latte::Server.new Logger.new(STDOUT)
+      resolver = lambda { |response|
+        response.add "www.example.com. IN CNAME  3600 example.com."
+        response.add "example.com.     IN A     86400 127.0.0.1"
+      }
+      require 'logger'
+      server = Latte::Server.new resolver, Logger.new(STDOUT)
       server.listen_on *arguments.addresses
       server.run
     end
