@@ -1,6 +1,6 @@
 module Latte
   class Server
-    CHECK_ALIVE_INTERVAL = 0.05
+    CHECK_ALIVE_INTERVAL = 5
 
     initialize_with :resolver, :logger
     default_value_of :resolver, lambda { |*| }
@@ -52,23 +52,27 @@ module Latte
       logger.debug "Preparing server for #{address}"
       server_loop = "#{address.protocol}_server_loop"
       children[address] = Thread.new do
-        logger.debug "Server starting on #{address}"
-        Socket.send server_loop, address.ip_address, address.port do |data, client|
-          Thread.new do
-            begin
-              query = Query.new data
-              client_name = client.remote_address.ip_unpack.join ':'
-              logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
-              response = Response.new query
-              resolver.call response
-              logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
-              client.reply response.to_s
-            rescue => e
-              logger.error [ e.message, e.backtrace ].flatten.join("\n")
+        begin
+          logger.debug "Server starting on #{address}"
+          Socket.send server_loop, address.ip_address, address.port do |data, client|
+            Thread.new do
+              begin
+                query = Query.new data
+                client_name = client.remote_address.ip_unpack.join ':'
+                logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
+                response = Response.new query
+                resolver.call query, response
+                logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
+                client.reply response.to_s
+              rescue => e
+                logger.error [ e.message, e.backtrace ].flatten.join("\n")
+              end
             end
           end
+          logger.warn "Server loop terminated"
+        rescue => e
+          logger.error [ e.message, e.backtrace ].flatten.join("\n")
         end
-        logger.warn "Server loop terminated"
       end
       logger.debug "Server started for #{address}"
     end

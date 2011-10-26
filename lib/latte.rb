@@ -1,6 +1,5 @@
 require 'null_logger'
 require 'socket'
-require 'ostruct'
 require 'bindata'
 require 'pethau'
 
@@ -11,7 +10,6 @@ class Object
 end
 
 require 'latte/hex_presenter'
-require 'latte/command_line'
 require 'latte/address'
 require 'latte/query'
 require 'latte/response'

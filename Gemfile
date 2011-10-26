@@ -1,5 +1,4 @@
-source :rubygems
+source "http://rubygems.org"
 
-gem 'pethau', '0.0.2'
-gem 'null_logger'
-gem 'bindata'
+# Specify your gem's dependencies in latte.gemspec
+gemspec

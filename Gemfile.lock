@@ -1,3 +1,11 @@
+PATH
+  remote: .
+  specs:
+    latte (0.0.1)
+      bindata
+      null_logger
+      pethau (>= 0.0.2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -9,6 +17,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bindata
-  null_logger
-  pethau (= 0.0.2)
+  latte!

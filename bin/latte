@@ -1,6 +1,0 @@
-#! /usr/bin/env ruby
-
-require 'latte'
-
-command = Latte::CommandLine.new ARGV
-command.execute
