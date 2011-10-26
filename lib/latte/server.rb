@@ -54,12 +54,18 @@ module Latte
         logger.debug "Server starting on #{address}"
         Socket.send server_loop, address.ip_address, address.port do |data, client|
           Thread.new do
-            query = Query.new data
-            client_name = client.remote_address.ip_unpack.join ':'
-            logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
-            response = Response.new query
-            logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
-            client.reply response.to_s
+            begin
+              query = Query.new data
+              client_name = client.remote_address.ip_unpack.join ':'
+              logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
+              response = Response.new query
+              response.add "www.example.com. IN CNAME  3600 example.com."
+              response.add "example.com.     IN A     86400 127.0.0.1"
+              logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
+              client.reply response.to_s
+            rescue => e
+              logger.error [ e.message, e.backtrace ].flatten.join("\n")
+            end
           end
         end
         logger.warn "Server loop terminated"

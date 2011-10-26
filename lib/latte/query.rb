@@ -1,6 +1,6 @@
 module Latte
   class Query
-    # QTTYPE codes:
+    # QTYPE codes:
     # A 1 a host address
     # NS 2 an authoritative name server
     # MD 3 a mail destination (Obsolete - use MX)
