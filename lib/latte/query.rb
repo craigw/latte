@@ -17,6 +17,10 @@ module Latte
       def qtype
 	wrapped_question.qType
       end
+
+      def to_s
+        wrapped_question.to_s
+      end
     end
 
     def to_s
