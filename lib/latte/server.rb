@@ -59,11 +59,16 @@ module Latte
               begin
                 query = Query.new data
                 client_name = client.remote_address.ip_unpack.join ':'
-                logger.debug "#{client_name} > #{address}: #{HexPresenter.new(data)}"
-                response = Response.new query
-                resolver.call query, response
-                logger.debug "#{client_name} < #{address}: #{HexPresenter.new(response)}"
-                client.reply response.to_s
+                logger.info "#{client_name} > #{address}: Received query:\n#{query}"
+                logger.debug "#{client_name} > #{address}: Packet: #{HexPresenter.new(data)}"
+                response = Response.new query, logger
+                query.each_question do |question|
+                  resolver.call question, response
+                end
+                answer = response.data
+                logger.info "#{client_name} < #{address}: Sending repsonse:\n#{response}"
+                logger.debug "#{client_name} < #{address}: Packet: #{HexPresenter.new(answer)}"
+                client.reply answer
               rescue => e
                 logger.error [ e.message, e.backtrace ].flatten.join("\n")
               end

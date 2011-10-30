@@ -2,6 +2,7 @@ require 'null_logger'
 require 'socket'
 require 'bindata'
 require 'pethau'
+require 'net/dns/packet'
 
 class Object
   include Pethau::InitializeWith
