@@ -1,0 +1,21 @@
+#! /usr/bin/env ruby
+
+require 'latte'
+
+remote_resolver = Net::DNS::Resolver.new :nameservers => %w(8.8.8.8 8.8.4.4)
+
+resolver = proc { |q,r|
+  if q.qname =~ /\.dev\.$/
+    r.add_answer "#{q.qname} 300 #{q.qclass} #{q.qtype} 127.0.0.1"
+  else
+    packet = remote_resolver.query q.qname.to_s, q.qtype.to_s, q.qclass.to_s
+    packet.answer.each do |rr|
+      r.add_answer rr.to_s
+    end
+  end
+}
+
+logger = Logger.new STDOUT
+logger.level = Logger::DEBUG
+server = Latte::Server.new resolver, logger
+server.run
